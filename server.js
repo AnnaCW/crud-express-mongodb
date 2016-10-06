@@ -17,9 +17,13 @@ MongoClient.connect('mongodb://acw:expresspwd@ds011963.mlab.com:11963/crud-expre
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  db.collection('quotes').find().toArray((err, result) => {
+    if (err) return console.log(err);
+    res.render('index.ejs', {quotes: result});
+  });
 });
 
 app.post('/quotes', (req, res) => {
